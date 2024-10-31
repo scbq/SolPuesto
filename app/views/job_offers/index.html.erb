@@ -1,0 +1,22 @@
+<!-- app/views/job_offers/index.html.erb -->
+<div class="container">
+  <h2 class="my-4 text-center">Ofertas Laborales</h2>
+  <% if current_user&.admin? %>
+    <div class="d-flex justify-content-end mb-3">
+      <%= link_to 'Nueva Oferta Laboral', new_job_offer_path, class: "btn btn-primary" %>
+      <i class="fas fa-plus-circle ms-2"></i>
+    </div>
+  <% end %>
+  <% @job_offers.each do |offer| %>
+    <div class="card my-3">
+      <div class="card-body">
+        <h3 class="card-title">
+          <%= offer.title %>
+          <i class="fas fa-briefcase"></i>
+        </h3>
+        <p class="card-text"><%= offer.description %></p>
+        <%= link_to 'Postular', new_application_path(job_offer_id: offer.id), class: "btn btn-success" %>
+      </div>
+    </div>
+  <% end %>
+</div>

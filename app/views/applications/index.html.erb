@@ -1,0 +1,7 @@
+<h2>Mis Postulaciones</h2>
+<% @applications.each do |application| %>
+  <div>
+    <p><strong>Oferta:</strong> <%= application.job_offer.title %></p>
+    <p><strong>Estado:</strong> <%= application.status %></p>
+  </div>
+<% end %>
