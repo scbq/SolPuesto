@@ -21,16 +21,13 @@ class ApplicationsController < ApplicationController
 
   # POST /applications or /applications.json
   def create
-    @application = Application.new(application_params)
+    @application = current_user.applications.build(application_params)
 
-    respond_to do |format|
-      if @application.save
-        format.html { redirect_to @application, notice: "Application was successfully created." }
-        format.json { render :show, status: :created, location: @application }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @application.errors, status: :unprocessable_entity }
-      end
+    if @application.save
+      ApplicationMailer.new_application_notification(@application).deliver_now
+      redirect_to applications_path, notice: "Tu postulación ha sido enviada exitosamente."
+    else
+      render :new
     end
   end
 
