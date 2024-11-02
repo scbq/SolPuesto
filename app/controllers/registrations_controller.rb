@@ -9,7 +9,7 @@ class RegistrationsController < ApplicationController
     email = params[:email]
     message = params[:message]
 
-    # Envía el correo a Esteban con los detalles de registro
+    # Envía el correo a Esteban usando la dirección configurada en el archivo de entorno
     RegistrationMailer.with(name: name, email: email, message: message).registration_request_email.deliver_now
 
     # Redirige a la página de inicio de sesión tras enviar la solicitud
