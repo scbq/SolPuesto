@@ -1,5 +1,10 @@
 class JobOffersController < ApplicationController
-  before_action :set_job_offer, only: %i[ show edit update destroy ]
+  # Asegura que el usuario esté autenticado para todas las acciones
+  before_action :authenticate_user!
+  # Limita ciertas acciones solo al administrador
+  before_action :authorize_admin, only: [ :new, :create, :edit, :update, :destroy ]
+  # Carga la oferta antes de acciones específicas
+  before_action :set_job_offer, only: [ :show, :edit, :update, :destroy ]
 
   # GET /job_offers or /job_offers.json
   def index
@@ -15,13 +20,10 @@ class JobOffersController < ApplicationController
     @job_offer = JobOffer.new
   end
 
-  # GET /job_offers/1/edit
-  def edit
-  end
-
   # POST /job_offers or /job_offers.json
   def create
     @job_offer = JobOffer.new(job_offer_params)
+    @job_offer.user = current_user # Asigna automáticamente el usuario actual (Esteban)
 
     respond_to do |format|
       if @job_offer.save
@@ -50,7 +52,6 @@ class JobOffersController < ApplicationController
   # DELETE /job_offers/1 or /job_offers/1.json
   def destroy
     @job_offer.destroy!
-
     respond_to do |format|
       format.html { redirect_to job_offers_path, status: :see_other, notice: "Job offer was successfully destroyed." }
       format.json { head :no_content }
@@ -58,13 +59,19 @@ class JobOffersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    # Autorización para limitar las acciones a solo el administrador
+    def authorize_admin
+      redirect_to root_path, alert: "No tienes permiso para realizar esta acción." unless current_user&.admin?
+    end
+
+    # Usa callbacks para configurar la oferta
     def set_job_offer
       @job_offer = JobOffer.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
+    # Solo permite parámetros específicos
     def job_offer_params
-      params.require(:job_offer).permit(:title, :description, :user_id)
+      params.require(:job_offer).permit(:title, :description)
     end
 end
