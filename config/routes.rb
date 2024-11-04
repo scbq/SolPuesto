@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get "home/index"
   get "register", to: "registrations#new", as: :register
   post "register", to: "registrations#create"
+  get 'admin/new_user', to: 'admin/users#new', as: :new_admin_user
+  post 'admin/users', to: 'admin/users#create', as: :admin_users
 
   resources :applications
   resources :job_offers
