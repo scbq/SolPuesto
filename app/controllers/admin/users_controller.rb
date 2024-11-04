@@ -8,7 +8,7 @@ class Admin::UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.password = Devise.friendly_token[0, 20] # Genera una contraseña temporal
+    @user.password = Devise.friendly_token[0, 20]
 
     if @user.save
       RegistrationMailer.with(user: @user).user_created_email.deliver_now

@@ -1,19 +1,31 @@
-<!-- app/views/home/index.html.erb -->
-<div class="text-center mt-5">
-  <%= image_tag "welcome_image.jpg", alt: "Welcome Image", class: "img-fluid" %>
-  <div class="mt-3">
-    <%= link_to "Ingresar", new_user_session_path, class: "btn btn-primary btn-lg" %>
+<h1>Bienvenido a SolPuesto</h1>
+
+<% if current_user&.admin? %>
+  <div>
+    <%= link_to "Crear Usuario", new_admin_user_path, class: "btn btn-primary" %>
   </div>
-</div>
+  <div>
+    <%= link_to "Crear Publicación de Empleo", new_job_offer_path, class: "btn btn-secondary" %>
+  </div>
+  <div>
+    <%= link_to "Ver Publicaciones de Empleo", job_offers_path, class: "btn btn-info" %>
+  </div>
+<% else %>
+  <div>
+    <%= link_to "Ver Publicaciones de Empleo", job_offers_path, class: "btn btn-info" %>
+  </div>
+<% end %>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const button = document.querySelector(".btn-primary");
-    button.addEventListener("mouseover", function() {
-      this.classList.add("animate__animated", "animate__pulse");
-    });
-    button.addEventListener("mouseout", function() {
-      this.classList.remove("animate__animated", "animate__pulse");
+    const buttons = document.querySelectorAll(".btn");
+    buttons.forEach(button => {
+      button.addEventListener("mouseover", function() {
+        this.classList.add("animate__animated", "animate__pulse");
+      });
+      button.addEventListener("mouseout", function() {
+        this.classList.remove("animate__animated", "animate__pulse");
+      });
     });
   });
 </script>
